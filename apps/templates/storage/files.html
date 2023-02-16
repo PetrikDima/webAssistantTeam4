@@ -35,7 +35,7 @@
                     </div>
                     <!-- [ breadcrumb ] end -->
                     <div class="main-body">
-                        <div class="page-wrapper" style="display: flex">
+                        <div class="page-wrapper" style="display: block">
                             <!-- [ Main Content ] start -->
                              <table class="table project-list-table table-nowrap align-middle table-borderless" id="example" style="width: 100%;">
                                  <thead>
@@ -97,6 +97,27 @@
                                             </tr>
                                         {% endfor %}
                              </table>
+                            {% if files.has_other_pages %}
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                  <ul class="pagination justify-content-center">
+                                  {% if files.has_previous %}
+                                  <li class="page-item"><a class="page-link" href="?page={{ files.previous_page_number }}">Previous</a></li>
+                                  {% endif %}
+                                  {% for page in files.paginator.page_range %}
+                                  {%  if files.number == page  %}
+                                      <li class="page-item disabled"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                  {% else %}
+                                      <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% if files.has_next %}
+                                  <li class="page-item"><a class="page-link" href="?page={{ files.next_page_number }}">Next</a></li>
+                                  {% endif %}
+                                  </ul>
+                                </nav>
+                            </div>
+                            {% endif %}
                             <!-- [ Main Content ] end -->
                         </div>
                     </div>

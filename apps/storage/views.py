@@ -1,14 +1,21 @@
 import mimetypes
+
 import os
 from pathlib import Path
+
 from wsgiref.util import FileWrapper
+
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.http import StreamingHttpResponse
 from django.shortcuts import render, redirect
+
 from core.settings import CORE_DIR
+
 from .models import File, Downloads
 from .сonstans import REGISTER_EXTENSIONS, UPLOADS_DIR
+
 
 
 # Create your views here.
@@ -68,8 +75,12 @@ def download(request, name):
 
 
 def render_storage_pages(request, file_type):
-    files = File.objects.filter(type=file_type, owner=request.user).all()
     title = file_type
+    paginator = Paginator(File.objects.filter(type=file_type, owner=request.user).all(), 5)
+
+    page_number = request.GET.get('page')
+    files = paginator.get_page(page_number)
+
     return render(request, 'storage/files.html', context={'files': files,
                                                           'title': title})
 
